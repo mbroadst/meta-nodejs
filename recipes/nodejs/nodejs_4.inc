@@ -45,9 +45,12 @@ do_configure () {
   ./configure 	--prefix="${prefix}" \
 		--dest-cpu="${@map_dest_cpu(d.getVar('TARGET_ARCH', True), d)}" \
 		--dest-os=linux ${ARCHFLAGS} \
-		--without-snapshot \
 		${EXTRA_OECONF}
   unalias g++
+
+  # for snapshot support
+  sed -i "s#'want_separate_host_toolset%': 0#'want_separate_host_toolset%': 1#g" common.gypi
+  sed -i "s#'want_separate_host_toolset': 0#'want_separate_host_toolset': 1#g" config.gypi
 }
 
 do_compile () {
